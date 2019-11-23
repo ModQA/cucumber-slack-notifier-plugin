@@ -26,7 +26,7 @@ public class CucumberSlackService {
 
         JsonElement jsonElement = getResultFileAsJsonElement(workspace, json);
         SlackClient client = new SlackClient(jenkinsUrl, channelWebhookUrl, hideSuccessfulResults);
-        client.postToSlack(jsonElement, build.getParent().getDisplayName(), build.getNumber(), extra);
+        client.postToSlack(jsonElement, build.getParent().getDisplayName(), build.getNumber(), build.getUrl());
     }
 
     private JsonElement getResultFileAsJsonElement(FilePath workspace, String json) {
@@ -35,7 +35,7 @@ public class CucumberSlackService {
 
         final Gson gson = new Gson();
         try {
-            final JsonReader jsonReader = new JsonReader(new InputStreamReader(jsonPath.read()));
+            final JsonReader jsonReader = new JsonReader(new InputStreamReader(jsonPath.read(), "UTF-8"));
             return gson.fromJson(jsonReader, JsonElement.class);
         } catch (IOException e) {
             LOG.severe("Exception occurred while reading test results: " + e);

@@ -23,7 +23,7 @@ public class SlackClientTest {
         assertEquals(8, result.getTotalFeatures());
         assertEquals(100, result.getPassPercentage());
 
-        String slackMessage = result.toSlackMessage("test-job", 7, "http://jenkins:8080/", null);
+        String slackMessage = result.toSlackMessage("test-job", 7, "http://jenkins:8080/", "http://jenkins:8080/job/test-job/7/");
         assertNotNull(slackMessage);
         assertTrue(slackMessage.contains("<http://jenkins:8080/job/test-job/7/cucumber-html-reports/report-feature_751168504.html|Validate Confluence Home Page>"));
         assertTrue(slackMessage.contains("<http://jenkins:8080/job/test-job/7/cucumber-html-reports/report-feature_1_552978313.html|Validate Gerrit Home Page>"));
@@ -40,7 +40,7 @@ public class SlackClientTest {
         assertEquals(0, result.getTotalFeatures());
         assertEquals(100, result.getPassPercentage());
 
-        String slackMessage = result.toSlackMessage("test-job", 7, "http://jenkins:8080/", null);
+        String slackMessage = result.toSlackMessage("test-job", 7, "http://jenkins:8080/", "http://jenkins:8080/job/test-job/7/");
         assertNotNull(slackMessage);
     }
 
@@ -70,21 +70,21 @@ public class SlackClientTest {
 
     @Test
     public void canGenerateGoodMessage() {
-        String slackMessage = successfulResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", null);
+        String slackMessage = successfulResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", "http://jenkins:8080/job/test-job/7/");
         assertNotNull(slackMessage);
         assertTrue(slackMessage.contains("good"));
     }
 
     @Test
     public void canGenerateMarginalMessage() {
-        String slackMessage = marginalResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", null);
+        String slackMessage = marginalResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", "http://jenkins:8080/job/test-job/7/");
         assertNotNull(slackMessage);
         assertTrue(slackMessage.contains("warning"));
     }
 
     @Test
     public void canGenerateBadMessage() {
-        String slackMessage = badResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", null);
+        String slackMessage = badResult().toSlackMessage("test-job", 1, "http://jenkins:8080/", "http://jenkins:8080/job/test-job/7/");
         assertNotNull(slackMessage);
         assertTrue(slackMessage.contains("danger"));
     }
@@ -103,14 +103,14 @@ public class SlackClientTest {
     }
 
     private CucumberResult successfulResult() {
-        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Uri","Dummy Feature", 100)), 1, 100);
+        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Feature", 100,1,0,"Dummy Uri")), 1, 100);
     }
 
     private CucumberResult badResult() {
-        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Uri","Dummy Feature", 0)), 1, 0);
+        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Feature", 0, 1, 0, "Dummy Uri")), 1, 0);
     }
 
     private CucumberResult marginalResult() {
-        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Uri","Dummy Feature", 99)), 1, 99);
+        return new CucumberResult(Collections.singletonList(new FeatureResult("Dummy Feature", 99,1,0,"Dummy Uri")), 1, 99);
     }
 }

@@ -33,10 +33,10 @@ public class CucumberResult {
         return this.featureResults;
     }
 
-    public String toSlackMessage(final String jobName, final int buildNumber, final String jenkinsUrl, final String extra) {
+    public String toSlackMessage(final String jobName, final int buildNumber, final String jenkinsUrl, final String buildUrl) {
         final JsonObject json = new JsonObject();
         json.addProperty("channel", "#");
-        addCaption(json, buildNumber, jobName, jenkinsUrl, extra);
+        addCaption(json, buildNumber, jobName, jenkinsUrl, buildUrl);
 
         final JsonArray attachmentsJson = new JsonArray();
         JsonObject fields = new JsonObject();
@@ -73,25 +73,21 @@ public class CucumberResult {
         return s.toString();
     }
 
-    public String toHeader(final String jobName, final int buildNumber, final String jenkinsUrl, final String extra) {
+    public String toHeader(final String jobName, final int buildNumber, final String jenkinsUrl, final String buildUrl) {
         StringBuilder s = new StringBuilder();
-        if (StringUtils.isNotEmpty(extra)) {
-            s.append(extra);
-        }
         s.append("Features: ");
         s.append(getTotalFeatures());
         s.append(", Scenarios: ");
         s.append(getTotalScenarios());
         s.append(", Build: <");
-        s.append(getJenkinsHyperlink(jenkinsUrl, jobName, buildNumber));
-        s.append("cucumber-html-reports/|");
-        s.append(buildNumber);
+        s.append(buildUrl);
+        s.append(String.format("cucumber-html-reports/|%d", buildNumber));
         s.append(">");
         return s.toString();
     }
 
-    private void addCaption(final JsonObject json, final int buildNumber, final String jobName, final String jenkinsUrl, final String extra) {
-        json.addProperty("text", toHeader(jobName, buildNumber, jenkinsUrl, extra));
+    private void addCaption(final JsonObject json, final int buildNumber, final String jobName, final String jenkinsUrl, final String buildUrl) {
+        json.addProperty("text", toHeader(jobName, buildNumber, jenkinsUrl, buildUrl));
     }
 
     private void addAttachmentColor(JsonArray jsonArray, String colorValue) {
