@@ -132,7 +132,7 @@ public class CucumberSlackStep extends AbstractStepImpl {
             CucumberSlackService slackService = new CucumberSlackService(webHookEndpoint);
             
             try {
-            	slackService.sendCucumberReportToSlack(run, workspace, json, channel, extra, hideSuccessfulResults);
+            	slackService.sendCucumberReportToSlack(run, workspace, json, channel, hideSuccessfulResults);
             } catch (Exception exp) {
             	if (step.failOnError) {
             		throw new AbortException("Unable to send slack notification: " + exp);
