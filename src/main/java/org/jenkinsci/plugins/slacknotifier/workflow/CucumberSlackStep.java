@@ -52,8 +52,8 @@ public class CucumberSlackStep extends AbstractStepImpl {
     }
 
     @DataBoundSetter
-    public void setHideSuccessfulResults(String hideSuccessfulResults) {
-        this.hideSuccessfulResults = Boolean.getBoolean(Util.fixEmpty(hideSuccessfulResults));
+    public void setHideSuccessfulResults(boolean hideSuccessfulResults) {
+        this.hideSuccessfulResults = hideSuccessfulResults;
     }
 
     public String getExtra() {
